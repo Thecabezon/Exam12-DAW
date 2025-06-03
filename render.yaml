@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: exam12-daw
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
