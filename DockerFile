@@ -1,0 +1,28 @@
+# Usa una imagen base de Java
+FROM openjdk:17-jdk-slim
+
+# Directorio de trabajo
+WORKDIR /app
+
+# Copia el archivo pom.xml y descarga dependencias
+COPY pom.xml .
+COPY mvnw .
+COPY .mvn .mvn
+
+# Da permisos de ejecución
+RUN chmod +x mvnw
+
+# Descarga dependencias
+RUN ./mvnw dependency:go-offline
+
+# Copia el código fuente
+COPY src src
+
+# Compila la aplicación
+RUN ./mvnw clean package -DskipTests
+
+# Expone el puerto
+EXPOSE $PORT
+
+# Comando para ejecutar la aplicación
+CMD ["java", "-jar", "-Dserver.port=$PORT", "target/*.jar"]
